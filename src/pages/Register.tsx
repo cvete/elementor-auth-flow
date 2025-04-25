@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AuthLayout from "@/components/AuthLayout";
 import AuthForm, { FormField } from "@/components/AuthForm";
 import { toast } from "@/components/ui/use-toast";
+import SocialLoginButtons from "@/components/SocialLoginButtons";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -111,6 +112,7 @@ const Register = () => {
       title="Create your account" 
       subtitle="Register with your details to get started"
     >
+      <SocialLoginButtons />
       <AuthForm
         fields={fields}
         submitText={isLoading ? "Creating Account..." : "Create Account"}

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AuthLayout from "@/components/AuthLayout";
 import AuthForm, { FormField } from "@/components/AuthForm";
 import { toast } from "@/components/ui/use-toast";
+import SocialLoginButtons from "@/components/SocialLoginButtons";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -83,6 +84,7 @@ const Login = () => {
       title="Sign in to your account" 
       subtitle="Enter your credentials to access your account"
     >
+      <SocialLoginButtons />
       <AuthForm
         fields={fields}
         submitText={isLoading ? "Signing In..." : "Sign In"}
