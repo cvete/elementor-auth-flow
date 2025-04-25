@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Facebook, Github, Google } from "lucide-react";
+import { Mail, Facebook, Github } from "lucide-react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { toast } from "@/components/ui/use-toast";
 
@@ -33,7 +33,7 @@ const SocialLoginButtons = () => {
         className="w-full"
         onClick={() => handleSocialLogin('google')}
       >
-        <Google className="mr-2 h-4 w-4" />
+        <Mail className="mr-2 h-4 w-4" />
         Continue with Google
       </Button>
       
