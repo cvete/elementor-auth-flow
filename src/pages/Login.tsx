@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "@/components/AuthLayout";
@@ -47,8 +46,6 @@ const Login = () => {
       });
       
       if (error) throw error;
-      
-      console.log("Login data:", data);
       
       toast({
         title: "Login Successful",

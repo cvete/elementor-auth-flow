@@ -1,13 +1,15 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "@/components/AuthLayout";
 import AuthForm, { FormField } from "@/components/AuthForm";
 import { toast } from "@/components/ui/use-toast";
 import SocialLoginButtons from "@/components/SocialLoginButtons";
+import { supabase } from "@/integrations/supabase/client";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const fields: FormField[] = [
     {
@@ -58,7 +60,7 @@ const Register = () => {
     }
   ];
 
-  const handleSubmit = (data: Record<string, string>) => {
+  const handleSubmit = async (data: Record<string, string>) => {
     setIsLoading(true);
     
     // Check if passwords match
@@ -72,17 +74,39 @@ const Register = () => {
       return;
     }
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Register user with Supabase
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.name,
+          },
+        },
+      });
+      
+      if (error) throw error;
+      
       console.log("Registration data:", data);
       
       toast({
         title: "Registration Successful",
-        description: "Your account has been created successfully.",
+        description: "Your account has been created successfully. Please check your email for verification.",
       });
       
+      // Redirect to login page after successful registration
+      navigate("/login");
+    } catch (error: any) {
+      console.error("Registration error:", error);
+      toast({
+        title: "Registration Failed",
+        description: error.message || "Failed to create account. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const footer = (
