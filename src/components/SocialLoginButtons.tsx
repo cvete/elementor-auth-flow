@@ -1,12 +1,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Mail, Facebook, Github } from "lucide-react";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { supabase } from "@/integrations/supabase/client"; 
 import { toast } from "@/components/ui/use-toast";
 
 const SocialLoginButtons = () => {
-  const supabase = useSupabaseClient();
-
   const handleSocialLogin = async (provider: 'google' | 'facebook' | 'github') => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -17,7 +15,7 @@ const SocialLoginButtons = () => {
       });
 
       if (error) throw error;
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
         description: "Failed to sign in. Please try again.",

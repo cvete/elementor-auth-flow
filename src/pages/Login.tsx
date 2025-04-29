@@ -1,15 +1,15 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "@/components/AuthLayout";
 import AuthForm, { FormField } from "@/components/AuthForm";
 import { toast } from "@/components/ui/use-toast";
 import SocialLoginButtons from "@/components/SocialLoginButtons";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const supabase = useSupabaseClient();
 
   const fields: FormField[] = [
     {
