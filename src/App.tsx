@@ -51,11 +51,9 @@ const App = () => (
           <Route path="/forgot-password" element={<RedirectIfAuthenticated><ForgotPassword /></RedirectIfAuthenticated>} />
           
           {/* Protected routes - require authentication */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/home" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
-          {/* Old home route - redirect to dashboard */}
-          <Route path="/home" element={<Navigate to="/dashboard" replace />} />
+          {/* Remove duplicated route */}
           
           {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />

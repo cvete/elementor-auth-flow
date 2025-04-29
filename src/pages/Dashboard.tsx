@@ -4,29 +4,33 @@ import TVChannelList from "@/components/tv/TVChannelList";
 import { Card, CardContent } from "@/components/ui/card";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const user = useUser();
   const supabase = useSupabaseClient();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const { data } = await supabase.auth.getUser();
-        if (!data.user) {
-          // User is not logged in, redirect will happen below
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        
+        if (!data.session) {
+          navigate("/login");
         }
       } catch (error) {
         console.error("Error checking authentication:", error);
+        navigate("/login");
       } finally {
         setIsLoading(false);
       }
     };
     
     checkUser();
-  }, [supabase]);
+  }, [supabase, navigate]);
   
   // Redirect if user is not logged in
   if (!isLoading && !user) {

@@ -1,13 +1,16 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "@/components/AuthLayout";
 import AuthForm, { FormField } from "@/components/AuthForm";
 import { toast } from "@/components/ui/use-toast";
 import SocialLoginButtons from "@/components/SocialLoginButtons";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const supabase = useSupabaseClient();
 
   const fields: FormField[] = [
     {
@@ -34,11 +37,17 @@ const Login = () => {
     }
   ];
 
-  const handleSubmit = (data: Record<string, string>) => {
+  const handleSubmit = async (data: Record<string, string>) => {
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+      
+      if (error) throw error;
+      
       console.log("Login data:", data);
       
       toast({
@@ -46,8 +55,18 @@ const Login = () => {
         description: "You have been successfully logged in.",
       });
       
+      // Redirect to dashboard after successful login
+      navigate("/dashboard");
+    } catch (error: any) {
+      console.error("Login error:", error);
+      toast({
+        title: "Login Failed",
+        description: error.message || "Failed to log in. Please check your credentials.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const footer = (
