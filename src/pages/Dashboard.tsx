@@ -2,13 +2,12 @@
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import TVChannelList from "@/components/tv/TVChannelList";
 import { Card, CardContent } from "@/components/ui/card";
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const Dashboard = () => {
-  const user = useUser();
-  const supabase = useSupabaseClient();
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   
@@ -20,6 +19,8 @@ const Dashboard = () => {
         
         if (!data.session) {
           navigate("/login");
+        } else {
+          setUser(data.session.user);
         }
       } catch (error) {
         console.error("Error checking authentication:", error);
@@ -30,7 +31,7 @@ const Dashboard = () => {
     };
     
     checkUser();
-  }, [supabase, navigate]);
+  }, [navigate]);
   
   // Redirect if user is not logged in
   if (!isLoading && !user) {
