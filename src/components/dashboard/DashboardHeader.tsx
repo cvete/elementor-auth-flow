@@ -1,12 +1,13 @@
 
 import { Button } from "@/components/ui/button";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Link } from "react-router-dom";
 import { Tv } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 const DashboardHeader = () => {
-  const supabase = useSupabaseClient();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
@@ -18,8 +19,10 @@ const DashboardHeader = () => {
         description: "You have been signed out of your account.",
       });
       
-      // The page will reload and redirect to login due to auth state change
+      // Manually navigate to login page after successful sign out
+      navigate("/login");
     } catch (error) {
+      console.error("Sign out error:", error);
       toast({
         title: "Error signing out",
         description: "There was a problem signing you out. Please try again.",
