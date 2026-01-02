@@ -30,19 +30,59 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         >
           <div className="h-full w-full bg-gradient-to-r from-purple-600/90 to-blue-500/80 flex flex-col justify-center items-center p-12">
             <div className="text-white max-w-md">
-              <h1 className="text-4xl font-bold mb-6">Welcome to tvstanici</h1>
-              <p className="text-lg mb-8">
-                Join our community and access exclusive content, resources, and features.
+              <h1 className="text-4xl font-bold mb-6">Macedonian TV Channels – Watch Live Online</h1>
+              <p className="text-lg mb-4">
+                Stream the most popular Macedonian TV channels in one place.
+              </p>
+              <p className="text-base mb-8">
+                Stay connected with Macedonia through real-time news, political debates, entertainment shows, documentaries, and live broadcasts — anytime, anywhere.
               </p>
               <div className="bg-white/20 p-6 rounded-lg backdrop-blur-sm">
-                <p className="text-white/90 italic">
-                  "This platform has transformed how I manage my content. The tools are intuitive and powerful!"
+                <p className="text-white/90 font-medium mb-4">
+                  Featured Channels:
                 </p>
-                <div className="mt-4 flex items-center">
-                  <div className="h-10 w-10 rounded-full bg-white/30"></div>
-                  <div className="ml-3">
-                    <p className="text-white font-medium">Sarah Johnson</p>
-                    <p className="text-white/70 text-sm">Content Creator</p>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
+                    <img
+                      src="https://tvstanici.net/wp-content/uploads/2023/11/sitel.webp"
+                      alt="TV Sitel"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                  <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
+                    <img
+                      src="https://tvstanici.net/wp-content/uploads/2023/11/Kanal-5.webp"
+                      alt="Kanal 5"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                  <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
+                    <img
+                      src="https://tvstanici.net/wp-content/uploads/2024/01/Telma.webp"
+                      alt="Telma"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                  <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
+                    <img
+                      src="https://tvstanici.net/wp-content/uploads/2023/11/Alfa.webp"
+                      alt="Alfa"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                  <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
+                    <img
+                      src="https://tvstanici.net/wp-content/uploads/2024/01/010-TV_24.png"
+                      alt="24 Vesti"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                  <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
+                    <img
+                      src="https://tvstanici.net/wp-content/uploads/2023/11/MRT1.webp"
+                      alt="MRT 1"
+                      className="max-h-full max-w-full object-contain"
+                    />
                   </div>
                 </div>
               </div>
