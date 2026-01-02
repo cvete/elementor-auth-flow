@@ -38,7 +38,10 @@
       "Bash(echo:*)",
       "Bash(export DATABASE_URL:*)",
       "Bash(\"/c/Program Files/PostgreSQL/18/bin/psql\" -U postgres -h localhost -c \"ALTER USER tvstanici_user CREATEDB;\")",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(git push:*)"
     ]
   }
 }

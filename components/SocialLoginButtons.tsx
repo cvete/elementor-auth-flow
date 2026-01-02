@@ -4,8 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Mail, Facebook } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { toast } from "@/components/ui/use-toast";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
+import { getTranslation } from "@/lib/translations";
 
 const SocialLoginButtons = () => {
+  const { language } = useLanguage();
+  const t = getTranslation(language);
+
   const handleSocialLogin = async (provider: 'google' | 'facebook' | 'github') => {
     try {
       await signIn(provider, {
@@ -13,8 +18,8 @@ const SocialLoginButtons = () => {
       });
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: "Failed to sign in. Please try again.",
+        title: t.error,
+        description: t.tryAgain,
         variant: "destructive",
       });
     }
@@ -28,7 +33,7 @@ const SocialLoginButtons = () => {
         onClick={() => handleSocialLogin('google')}
       >
         <Mail className="mr-2 h-4 w-4" />
-        Continue with Google
+        {t.continueWithGoogle}
       </Button>
 
       <Button
@@ -37,7 +42,7 @@ const SocialLoginButtons = () => {
         onClick={() => handleSocialLogin('facebook')}
       >
         <Facebook className="mr-2 h-4 w-4" />
-        Continue with Facebook
+        {t.continueWithFacebook}
       </Button>
 
       <div className="relative my-4">
@@ -46,7 +51,7 @@ const SocialLoginButtons = () => {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
+            {t.orContinueWith}
           </span>
         </div>
       </div>

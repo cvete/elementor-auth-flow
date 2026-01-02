@@ -7,15 +7,19 @@ import AuthLayout from "@/components/AuthLayout";
 import AuthForm, { FormField } from "@/components/AuthForm";
 import { toast } from "@/components/ui/use-toast";
 import SocialLoginButtons from "@/components/SocialLoginButtons";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
+import { getTranslation } from "@/lib/translations";
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { language } = useLanguage();
+  const t = getTranslation(language);
 
   const fields: FormField[] = [
     {
       id: "name",
-      label: "Full Name",
+      label: t.name,
       type: "text",
       placeholder: "John Doe",
       icon: "user",
@@ -26,19 +30,19 @@ export default function RegisterPage() {
     },
     {
       id: "email",
-      label: "Email Address",
+      label: t.email,
       type: "email",
       placeholder: "name@company.com",
       icon: "mail",
       validation: {
         required: true,
         pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        patternMessage: "Please enter a valid email address"
+        patternMessage: t.emailInvalid
       }
     },
     {
       id: "password",
-      label: "Password",
+      label: t.password,
       type: "password",
       placeholder: "••••••••",
       icon: "lock",
@@ -46,12 +50,12 @@ export default function RegisterPage() {
         required: true,
         minLength: 8,
         pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        patternMessage: "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
+        patternMessage: t.passwordMinLength
       }
     },
     {
       id: "confirmPassword",
-      label: "Confirm Password",
+      label: t.password,
       type: "password",
       placeholder: "••••••••",
       icon: "lock",
@@ -98,8 +102,8 @@ export default function RegisterPage() {
       console.log("Registration data:", result);
 
       toast({
-        title: "Registration Successful",
-        description: "Your account has been created successfully.",
+        title: t.registerSuccess,
+        description: t.registerSuccessDesc,
       });
 
       // Redirect to login page after successful registration
@@ -107,8 +111,8 @@ export default function RegisterPage() {
     } catch (error: any) {
       console.error("Registration error:", error);
       toast({
-        title: "Registration Failed",
-        description: error.message || "Failed to create account. Please try again.",
+        title: t.registerFailed,
+        description: error.message || t.somethingWentWrong,
         variant: "destructive",
       });
     } finally {
@@ -130,9 +134,9 @@ export default function RegisterPage() {
         .
       </div>
       <p>
-        Already have an account?{" "}
+        {t.alreadyHaveAccount}{" "}
         <Link href="/login" className="font-medium text-purple-600 hover:text-purple-500">
-          Sign in here
+          {t.loginHere}
         </Link>
       </p>
     </>
@@ -140,13 +144,13 @@ export default function RegisterPage() {
 
   return (
     <AuthLayout
-      title="Create your account"
-      subtitle="Register with your details to get started"
+      title={t.registerTitle}
+      subtitle={t.registerSubtitle}
     >
       <SocialLoginButtons />
       <AuthForm
         fields={fields}
-        submitText={isLoading ? "Creating Account..." : "Create Account"}
+        submitText={isLoading ? t.registering : t.register}
         onSubmit={handleSubmit}
         footer={footer}
       />

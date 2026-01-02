@@ -1,4 +1,9 @@
+'use client';
+
 import { ReactNode } from "react";
+import { useLanguage } from "@/lib/contexts/LanguageContext";
+import { getTranslation } from "@/lib/translations";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -7,11 +12,17 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
+  const { language } = useLanguage();
+  const t = getTranslation(language);
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left side - Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
+          <div className="flex justify-end mb-4">
+            <LanguageSwitcher />
+          </div>
           <div className="text-center">
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">{title}</h2>
             <p className="mt-2 text-sm text-gray-600">{subtitle}</p>
@@ -30,16 +41,16 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         >
           <div className="h-full w-full bg-gradient-to-r from-purple-600/90 to-blue-500/80 flex flex-col justify-center items-center p-12">
             <div className="text-white max-w-md">
-              <h1 className="text-4xl font-bold mb-6">Macedonian TV Channels – Watch Live Online</h1>
+              <h1 className="text-4xl font-bold mb-6">{t.heroTitle}</h1>
               <p className="text-lg mb-4">
-                Stream the most popular Macedonian TV channels in one place.
+                {t.heroSubtitle1}
               </p>
               <p className="text-base mb-8">
-                Stay connected with Macedonia through real-time news, political debates, entertainment shows, documentaries, and live broadcasts — anytime, anywhere.
+                {t.heroSubtitle2}
               </p>
               <div className="bg-white/20 p-6 rounded-lg backdrop-blur-sm">
                 <p className="text-white/90 font-medium mb-4">
-                  Featured Channels:
+                  {t.featuredChannels}
                 </p>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
