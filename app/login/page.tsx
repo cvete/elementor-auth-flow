@@ -73,8 +73,8 @@ export default function LoginPage() {
       }
 
       // Redirect to dashboard after successful login
-      router.push("/dashboard");
-      router.refresh();
+      // Use window.location for a full page reload to ensure session is loaded
+      window.location.href = "/dashboard";
     } catch (error: any) {
       console.error("Login error:", error);
       toast({
