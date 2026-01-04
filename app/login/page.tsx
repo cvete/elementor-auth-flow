@@ -46,22 +46,34 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Using redirect: true means it will redirect on success
-      // If it doesn't redirect, login failed
-      await signIn("credentials", {
+      const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirect: true,
-        callbackUrl: "/dashboard",
+        redirect: false,
       });
 
-      // If we reach here, login failed (successful login redirects before this)
-      setIsLoading(false);
-      toast({
-        title: t.loginFailed,
-        description: "Invalid email or password",
-        variant: "destructive",
-      });
+      if (result?.error) {
+        setIsLoading(false);
+        toast({
+          title: t.loginFailed,
+          description: "Invalid email or password",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!result?.ok) {
+        setIsLoading(false);
+        toast({
+          title: t.loginFailed,
+          description: "Invalid email or password",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Login successful - redirect to dashboard
+      window.location.href = "/dashboard";
     } catch (error: any) {
       console.error("Login error:", error);
       setIsLoading(false);
