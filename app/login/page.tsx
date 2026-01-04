@@ -52,7 +52,7 @@ export default function LoginPage() {
         redirect: false,
       });
 
-      if (result?.error) {
+      if (result?.error || !result?.ok) {
         setIsLoading(false);
         toast({
           title: t.loginFailed,
@@ -62,18 +62,8 @@ export default function LoginPage() {
         return;
       }
 
-      if (!result?.ok) {
-        setIsLoading(false);
-        toast({
-          title: t.loginFailed,
-          description: "Invalid email or password",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // Login successful - redirect to dashboard
-      window.location.href = "/dashboard";
+      // Success - hard redirect to dashboard
+      window.location.replace("/dashboard");
     } catch (error: any) {
       console.error("Login error:", error);
       setIsLoading(false);
