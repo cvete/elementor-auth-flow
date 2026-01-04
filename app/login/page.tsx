@@ -46,7 +46,9 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await signIn("credentials", {
+      // Using redirect: true means it will redirect on success
+      // If it doesn't redirect, login failed
+      await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: true,
@@ -54,22 +56,20 @@ export default function LoginPage() {
       });
 
       // If we reach here, login failed (successful login redirects before this)
-      if (result?.error || !result?.ok) {
-        toast({
-          title: t.loginFailed,
-          description: "Invalid email or password",
-          variant: "destructive",
-        });
-      }
+      setIsLoading(false);
+      toast({
+        title: t.loginFailed,
+        description: "Invalid email or password",
+        variant: "destructive",
+      });
     } catch (error: any) {
       console.error("Login error:", error);
+      setIsLoading(false);
       toast({
         title: t.loginFailed,
         description: error.message || t.somethingWentWrong,
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
