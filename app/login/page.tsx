@@ -52,8 +52,24 @@ export default function LoginPage() {
         redirect: false,
       });
 
+      console.log("Login result:", result);
+
       if (result?.error) {
-        throw new Error(result.error);
+        toast({
+          title: t.loginFailed,
+          description: "Invalid email or password",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!result?.ok) {
+        toast({
+          title: t.loginFailed,
+          description: "Invalid email or password",
+          variant: "destructive",
+        });
+        return;
       }
 
       // Redirect to dashboard after successful login
