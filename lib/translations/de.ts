@@ -52,4 +52,19 @@ export const de: Translation = {
   error: "Fehler",
   tryAgain: "Bitte versuchen Sie es erneut.",
   somethingWentWrong: "Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.",
+
+  // Dashboard
+  continueWatching: "Weiter schauen",
+  allChannels: "Alle Kanäle",
+  watch: "Ansehen",
+  admin: "Admin",
+  signOut: "Abmelden",
+  signedOut: "Erfolgreich abgemeldet",
+  signedOutDesc: "Sie wurden abgemeldet",
+  errorSigningOut: "Fehler beim Abmelden",
+  continueBadge: "Weiter",
+  heroTag: "Mazedonisches Fernsehen",
+  heroTitle1: "TV ansehen",
+  heroTitle2: "Online",
+  heroSubtitle: "Alle mazedonischen Kanäle an einem Ort",
 };

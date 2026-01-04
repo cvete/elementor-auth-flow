@@ -50,6 +50,21 @@ export const en = {
   error: "Error",
   tryAgain: "Please try again.",
   somethingWentWrong: "Something went wrong. Please try again.",
+
+  // Dashboard
+  continueWatching: "Continue Watching",
+  allChannels: "All Channels",
+  watch: "Watch",
+  admin: "Admin",
+  signOut: "Sign Out",
+  signedOut: "Signed out successfully",
+  signedOutDesc: "You have been signed out of your account",
+  errorSigningOut: "Error signing out",
+  continueBadge: "Continue",
+  heroTag: "Macedonian Television",
+  heroTitle1: "Watch TV",
+  heroTitle2: "Online",
+  heroSubtitle: "All Macedonian channels in one place",
 };
 
 export type Translation = typeof en;

@@ -1,44 +1,56 @@
-import { Card } from "@/components/ui/card";
-import { Play } from "lucide-react";
-import Image from "next/image";
+'use client';
+
+import Link from 'next/link';
+import { Channel } from '@/lib/channels';
+import { Play } from 'lucide-react';
 
 interface ChannelCardProps {
-  id: string;
-  name: string;
-  logo: string;
-  currentShow?: string;
-  time?: string;
+  channel: Channel;
+  watchText: string;
+  continueBadge: string;
+  featured?: boolean;
 }
 
-const ChannelCard = ({ name, logo, currentShow, time }: ChannelCardProps) => {
+const ChannelCard = ({ channel, watchText, continueBadge, featured = false }: ChannelCardProps) => {
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl">
-      <div className="relative aspect-video bg-gradient-to-b from-blue-900 to-black flex items-center justify-center">
-        <Image
-          src={logo}
-          alt={`${name} logo`}
-          fill
-          className="object-cover object-center"
-        />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <button
-            className="bg-white/20 backdrop-blur-sm rounded-full p-3 hover:bg-white/30 transition-all"
-            aria-label={`Watch ${name}`}
-          >
-            <Play className="h-8 w-8 text-white fill-white" />
-          </button>
-        </div>
-      </div>
-
-      {(currentShow || time) && (
-        <div className="p-3 bg-gray-800 text-white">
-          <div className="text-sm font-medium">{name}</div>
-          {currentShow && <p className="text-xs text-gray-300 truncate">{currentShow}</p>}
-          {time && <p className="text-xs text-gray-400">{time}</p>}
+    <div className="relative group">
+      {featured && (
+        <div className="absolute -top-3 -right-3 z-10">
+          <span className="bg-slate-900 text-white text-xs px-3 py-1 rounded-full font-medium shadow-sm">
+            {continueBadge}
+          </span>
         </div>
       )}
-    </Card>
+
+      <div className="bg-white rounded-xl p-5 border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-200">
+        <div className="flex flex-col items-center">
+          {/* Channel Logo */}
+          <div className="w-20 h-20 mb-4 flex items-center justify-center">
+            <img
+              src={channel.logo}
+              alt={channel.name}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+
+          {/* Channel Name */}
+          <h3 className="text-center text-base font-medium text-slate-900 mb-4">
+            {channel.name}
+          </h3>
+
+          {/* Watch Button */}
+          <Link
+            href={`/channel/${channel.id}`}
+            className="w-full"
+          >
+            <button className="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors duration-200">
+              <Play className="w-4 h-4" fill="white" />
+              {watchText}
+            </button>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -8,9 +8,9 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-900 to-blue-700">
+    <div className="min-h-screen flex flex-col bg-white">
       <DashboardHeader />
-      <main className="flex-grow container mx-auto px-4 py-6">
+      <main className="flex-grow container mx-auto px-4 py-8 max-w-7xl">
         {children}
       </main>
       <DashboardFooter />

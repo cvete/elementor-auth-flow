@@ -52,4 +52,19 @@ export const mk: Translation = {
   error: "Грешка",
   tryAgain: "Ве молиме обидете се повторно.",
   somethingWentWrong: "Нешто тргна наопаку. Ве молиме обидете се повторно.",
+
+  // Dashboard
+  continueWatching: "Продолжи со гледање",
+  allChannels: "Сите канали",
+  watch: "Гледај",
+  admin: "Админ",
+  signOut: "Одјави се",
+  signedOut: "Успешно одјавени",
+  signedOutDesc: "Одјавени сте од вашата сметка",
+  errorSigningOut: "Грешка при одјавување",
+  continueBadge: "Продолжи",
+  heroTag: "Македонска Телевизија",
+  heroTitle1: "Гледај ТВ",
+  heroTitle2: "Онлајн",
+  heroSubtitle: "Сите македонски канали на едно место",
 };
