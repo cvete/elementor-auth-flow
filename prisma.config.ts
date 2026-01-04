@@ -10,6 +10,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env.DATABASE_URL || "postgresql://tvstanici_user:tvstanici_pass_2025!@91.98.112.195:5432/tvstanici_db?schema=public",
+    url: process.env.DATABASE_URL,
   },
 });
