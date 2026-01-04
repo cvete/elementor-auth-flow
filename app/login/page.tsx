@@ -49,32 +49,18 @@ export default function LoginPage() {
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirect: false,
+        redirect: true,
+        callbackUrl: "/dashboard",
       });
 
-      console.log("Login result:", result);
-
-      if (result?.error) {
+      // If we reach here, login failed (successful login redirects before this)
+      if (result?.error || !result?.ok) {
         toast({
           title: t.loginFailed,
           description: "Invalid email or password",
           variant: "destructive",
         });
-        return;
       }
-
-      if (!result?.ok) {
-        toast({
-          title: t.loginFailed,
-          description: "Invalid email or password",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // Redirect to dashboard after successful login
-      // Use window.location for a full page reload to ensure session is loaded
-      window.location.href = "/dashboard";
     } catch (error: any) {
       console.error("Login error:", error);
       toast({
