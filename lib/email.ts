@@ -1,9 +1,17 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy-load Resend client to avoid initialization during build time
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is not configured');
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+}
+
 const fromEmail = process.env.FROM_EMAIL || 'noreply@yourdomain.com';
 
 export async function sendPasswordResetEmail(email: string, token: string) {
+  const resend = getResendClient();
   const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
 
   try {
@@ -98,6 +106,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 }
 
 export async function sendVerificationEmail(email: string, token: string) {
+  const resend = getResendClient();
   const verificationUrl = `${process.env.NEXTAUTH_URL}/verify-email?token=${token}`;
 
   try {
