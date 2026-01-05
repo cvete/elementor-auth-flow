@@ -78,13 +78,15 @@ export default function LoginPage() {
         return;
       }
 
-      // Success - use result.url from NextAuth
-      console.log("Login successful, redirecting to:", result?.url);
-      if (result?.url) {
-        window.location.href = result.url;
-      } else {
-        window.location.href = "/dashboard";
-      }
+      // Success - wait a moment for cookie to be set, then redirect
+      console.log("Login successful!");
+      console.log("Result object:", JSON.stringify(result, null, 2));
+
+      // Wait 500ms for the cookie to be set properly
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Force a full page reload to /dashboard to ensure middleware sees the cookie
+      window.location.href = "/dashboard";
     } catch (error: any) {
       console.error("Login error:", error);
       setIsLoading(false);
