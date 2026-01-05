@@ -3,22 +3,38 @@ import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
+  console.log('[MIDDLEWARE] Path:', request.nextUrl.pathname);
+
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+    secureCookie: process.env.NODE_ENV === 'production',
+  })
+
+  console.log('[MIDDLEWARE] Token exists:', !!token);
+  console.log('[MIDDLEWARE] Token value:', token ? { email: token.email, id: token.id } : null);
+
   const isAuth = !!token
   const isAuthPage = request.nextUrl.pathname.startsWith('/login') ||
                      request.nextUrl.pathname.startsWith('/register')
 
+  console.log('[MIDDLEWARE] isAuth:', isAuth, 'isAuthPage:', isAuthPage);
+
   if (isAuthPage) {
     if (isAuth) {
+      console.log('[MIDDLEWARE] Authenticated user on auth page, redirecting to dashboard');
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }
+    console.log('[MIDDLEWARE] Unauthenticated user on auth page, allowing');
     return NextResponse.next()
   }
 
   if (!isAuth && request.nextUrl.pathname.startsWith('/dashboard')) {
+    console.log('[MIDDLEWARE] Unauthenticated user trying to access dashboard, redirecting to login');
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
+  console.log('[MIDDLEWARE] Allowing request');
   return NextResponse.next()
 }
 
