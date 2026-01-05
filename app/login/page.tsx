@@ -51,6 +51,7 @@ export default function LoginPage() {
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
+        callbackUrl: "/dashboard",
         redirect: false,
       });
 
@@ -77,9 +78,13 @@ export default function LoginPage() {
         return;
       }
 
-      // Success - hard redirect to dashboard
-      console.log("Login successful, redirecting...");
-      window.location.replace("/dashboard");
+      // Success - use result.url from NextAuth
+      console.log("Login successful, redirecting to:", result?.url);
+      if (result?.url) {
+        window.location.href = result.url;
+      } else {
+        window.location.href = "/dashboard";
+      }
     } catch (error: any) {
       console.error("Login error:", error);
       setIsLoading(false);
