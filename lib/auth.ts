@@ -21,49 +21,59 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        console.log("Attempting to authorize with email:", credentials?.email);
+        console.log("[AUTH] Attempting to authorize with email:", credentials?.email);
+        console.log("[AUTH] Environment check:", {
+          hasDbUrl: !!process.env.DATABASE_URL,
+          nodeEnv: process.env.NODE_ENV,
+        });
 
         if (!credentials?.email || !credentials?.password) {
-          console.log("Missing email or password");
+          console.log("[AUTH] Missing email or password");
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email as string
+        try {
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials.email as string
+            }
+          })
+          console.log("[AUTH] User found in DB:", user ? { id: user.id, email: user.email, hasPassword: !!user.password } : null);
+
+          if (!user || !user.password) {
+            console.log("[AUTH] User not found or no password set");
+            return null
           }
-        })
-        console.log("User found in DB:", user);
 
-        if (!user || !user.password) {
-          console.log("User not found or no password set");
+          const passwordMatch = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          )
+          console.log("[AUTH] Password match result:", passwordMatch);
+
+          if (!passwordMatch) {
+            console.log("[AUTH] Password does not match");
+            return null
+          }
+
+          // Check if email is verified (optional - log warning but allow login)
+          if (!user.emailVerified) {
+            console.log("[AUTH] Warning: Email not verified for user:", user.email);
+            // Allow login but user should verify email later
+            // Uncomment the line below to enforce email verification:
+            // throw new Error("Please verify your email before logging in. Check your inbox for the verification link.");
+          }
+
+          console.log("[AUTH] Authorization successful for user:", user.id);
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          }
+        } catch (error: any) {
+          console.error("[AUTH] Database error during authorization:", error.message);
+          console.error("[AUTH] Full error:", error);
           return null
-        }
-
-        const passwordMatch = await bcrypt.compare(
-          credentials.password as string,
-          user.password
-        )
-        console.log("Password match result:", passwordMatch);
-
-        if (!passwordMatch) {
-          console.log("Password does not match");
-          return null
-        }
-
-        // Check if email is verified (optional - log warning but allow login)
-        if (!user.emailVerified) {
-          console.log("Warning: Email not verified for user:", user.email);
-          // Allow login but user should verify email later
-          // Uncomment the line below to enforce email verification:
-          // throw new Error("Please verify your email before logging in. Check your inbox for the verification link.");
-        }
-
-        console.log("Authorization successful");
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
         }
       }
     })
@@ -75,6 +85,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   callbacks: {
     async signIn({ user, account, profile }) {
+      console.log("[AUTH CALLBACK] signIn called", {
+        userId: user?.id,
+        userEmail: user?.email,
+        provider: account?.provider
+      });
+
       if (account?.provider === "google") {
         try {
           // Check if user exists
@@ -93,6 +109,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 password: "", // Google users don't have a password
               }
             })
+            console.log("[AUTH CALLBACK] Created new Google user:", user.email);
           } else if (!existingUser.emailVerified) {
             // Update email verification if user exists but wasn't verified
             await prisma.user.update({
@@ -103,17 +120,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 name: user.name || existingUser.name,
               }
             })
+            console.log("[AUTH CALLBACK] Updated existing Google user:", user.email);
           }
         } catch (error) {
-          console.error("Error in Google sign-in:", error)
+          console.error("[AUTH CALLBACK] Error in Google sign-in:", error)
           return false
         }
       }
+
+      console.log("[AUTH CALLBACK] signIn returning true");
       return true
     },
     async jwt({ token, user, account }) {
+      console.log("[AUTH CALLBACK] jwt called", {
+        hasToken: !!token,
+        hasUser: !!user,
+        provider: account?.provider
+      });
+
       if (user) {
         token.id = user.id
+        console.log("[AUTH CALLBACK] Added user.id to token:", user.id);
       }
       // For Google login, fetch user from database
       if (account?.provider === "google" && token.email) {
@@ -122,13 +149,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         })
         if (dbUser) {
           token.id = dbUser.id
+          console.log("[AUTH CALLBACK] Added dbUser.id to token for Google:", dbUser.id);
         }
       }
       return token
     },
     async session({ session, token }) {
+      console.log("[AUTH CALLBACK] session called", {
+        hasSession: !!session,
+        hasToken: !!token,
+        tokenId: token?.id
+      });
+
       if (session.user) {
         session.user.id = token.id as string
+        console.log("[AUTH CALLBACK] Added token.id to session.user:", token.id);
       }
       return session
     }
