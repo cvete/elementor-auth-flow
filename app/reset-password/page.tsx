@@ -59,8 +59,7 @@ function ResetPasswordContent() {
       icon: "lock",
       validation: {
         required: true,
-        minLength: 8,
-        minLengthMessage: "Password must be at least 8 characters"
+        minLength: 8
       }
     },
     {
@@ -71,8 +70,7 @@ function ResetPasswordContent() {
       icon: "lock",
       validation: {
         required: true,
-        minLength: 8,
-        minLengthMessage: "Password must be at least 8 characters"
+        minLength: 8
       }
     }
   ];
