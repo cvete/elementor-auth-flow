@@ -46,23 +46,39 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
+      console.log("Attempting login with email:", data.email);
+
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: false,
       });
 
+      console.log("Login result:", result);
+
       if (result?.error || !result?.ok) {
         setIsLoading(false);
+
+        let errorMessage = "Invalid email or password";
+
+        if (result?.error === "CredentialsSignin") {
+          errorMessage = "Invalid email or password. Please check your credentials.";
+        } else if (result?.error) {
+          errorMessage = result.error;
+        }
+
+        console.error("Login failed:", result?.error);
+
         toast({
           title: t.loginFailed,
-          description: "Invalid email or password",
+          description: errorMessage,
           variant: "destructive",
         });
         return;
       }
 
       // Success - hard redirect to dashboard
+      console.log("Login successful, redirecting...");
       window.location.replace("/dashboard");
     } catch (error: any) {
       console.error("Login error:", error);

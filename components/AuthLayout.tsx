@@ -55,42 +55,42 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
                     <img
-                      src="https://tvstanici.net/wp-content/uploads/2023/11/sitel.webp"
+                      src="/img/tv-logo/sitelHD.png"
                       alt="TV Sitel"
                       className="max-h-full max-w-full object-contain"
                     />
                   </div>
                   <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
                     <img
-                      src="https://tvstanici.net/wp-content/uploads/2023/11/Kanal-5.webp"
+                      src="/img/tv-logo/005-Kanal_5.png"
                       alt="Kanal 5"
                       className="max-h-full max-w-full object-contain"
                     />
                   </div>
                   <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
                     <img
-                      src="https://tvstanici.net/wp-content/uploads/2024/01/Telma.webp"
+                      src="/img/tv-logo/telmaHD.png"
                       alt="Telma"
                       className="max-h-full max-w-full object-contain"
                     />
                   </div>
                   <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
                     <img
-                      src="https://tvstanici.net/wp-content/uploads/2023/11/Alfa.webp"
-                      alt="Alfa"
+                      src="/img/tv-logo/tv21HD.png"
+                      alt="TV 21"
                       className="max-h-full max-w-full object-contain"
                     />
                   </div>
                   <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
                     <img
-                      src="https://tvstanici.net/wp-content/uploads/2024/01/010-TV_24.png"
-                      alt="24 Vesti"
+                      src="/img/tv-logo/010-TV_24.png"
+                      alt="TV 24"
                       className="max-h-full max-w-full object-contain"
                     />
                   </div>
                   <div className="bg-white/90 rounded-lg p-2 flex items-center justify-center h-16">
                     <img
-                      src="https://tvstanici.net/wp-content/uploads/2023/11/MRT1.webp"
+                      src="/img/tv-logo/mrt1HD.png"
                       alt="MRT 1"
                       className="max-h-full max-w-full object-contain"
                     />
