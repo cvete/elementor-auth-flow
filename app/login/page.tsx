@@ -48,45 +48,13 @@ export default function LoginPage() {
     try {
       console.log("Attempting login with email:", data.email);
 
-      const result = await signIn("credentials", {
+      // Let NextAuth handle the redirect automatically
+      await signIn("credentials", {
         email: data.email,
         password: data.password,
         callbackUrl: "/dashboard",
-        redirect: false,
+        redirect: true, // Changed to true - let NextAuth handle redirect
       });
-
-      console.log("Login result:", result);
-
-      if (result?.error || !result?.ok) {
-        setIsLoading(false);
-
-        let errorMessage = "Invalid email or password";
-
-        if (result?.error === "CredentialsSignin") {
-          errorMessage = "Invalid email or password. Please check your credentials.";
-        } else if (result?.error) {
-          errorMessage = result.error;
-        }
-
-        console.error("Login failed:", result?.error);
-
-        toast({
-          title: t.loginFailed,
-          description: errorMessage,
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // Success - wait a moment for cookie to be set, then redirect
-      console.log("Login successful!");
-      console.log("Result object:", JSON.stringify(result, null, 2));
-
-      // Wait 500ms for the cookie to be set properly
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Force a full page reload to /dashboard to ensure middleware sees the cookie
-      window.location.href = "/dashboard";
     } catch (error: any) {
       console.error("Login error:", error);
       setIsLoading(false);
