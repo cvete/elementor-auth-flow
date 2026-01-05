@@ -48,13 +48,46 @@ export default function LoginPage() {
     try {
       console.log("Attempting login with email:", data.email);
 
-      // Let NextAuth handle the redirect automatically
-      await signIn("credentials", {
+      // Use redirect: false to handle errors manually
+      const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
         callbackUrl: "/dashboard",
-        redirect: true, // Changed to true - let NextAuth handle redirect
+        redirect: false,
       });
+
+      console.log("Login result:", result);
+
+      if (result?.error) {
+        setIsLoading(false);
+
+        // Check if it's an email verification error
+        if (result.error.includes("verify your email")) {
+          toast({
+            title: "Email Not Verified",
+            description: "Please check your email and click the verification link before logging in.",
+            variant: "destructive",
+          });
+        } else if (result.error === "CredentialsSignin") {
+          toast({
+            title: t.loginFailed,
+            description: "Invalid email or password. Please check your credentials.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: t.loginFailed,
+            description: result.error,
+            variant: "destructive",
+          });
+        }
+        return;
+      }
+
+      if (result?.ok) {
+        // Successful login - redirect to dashboard
+        window.location.href = "/dashboard";
+      }
     } catch (error: any) {
       console.error("Login error:", error);
       setIsLoading(false);
