@@ -56,12 +56,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             return null
           }
 
-          // Check if email is verified (optional - log warning but allow login)
+          // Check if email is verified (required for login)
           if (!user.emailVerified) {
-            console.log("[AUTH] Warning: Email not verified for user:", user.email);
-            // Allow login but user should verify email later
-            // Uncomment the line below to enforce email verification:
-            // throw new Error("Please verify your email before logging in. Check your inbox for the verification link.");
+            console.log("[AUTH] Email not verified for user:", user.email);
+            throw new Error("Please verify your email before logging in. Check your inbox for the verification link.");
           }
 
           console.log("[AUTH] Authorization successful for user:", user.id);
