@@ -25,21 +25,43 @@ export default function ForgotPasswordPage() {
     }
   ];
 
-  const handleSubmit = (data: Record<string, string>) => {
+  const handleSubmit = async (data: Record<string, string>) => {
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Forgot password request for:", data.email);
-
-      toast({
-        title: "Password Reset Link Sent",
-        description: "If an account exists with this email, you'll receive a password reset link.",
+    try {
+      const response = await fetch('/api/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: data.email }),
       });
 
+      const result = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Password Reset Link Sent",
+          description: result.message || "If an account exists with this email, you'll receive a password reset link.",
+        });
+        setIsSubmitted(true);
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "Failed to send reset link. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error sending password reset:", error);
+      toast({
+        title: "Error",
+        description: "An error occurred. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      setIsSubmitted(true);
-    }, 1500);
+    }
   };
 
   const footer = (

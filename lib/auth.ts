@@ -21,7 +21,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
+        console.log("Attempting to authorize with email:", credentials?.email);
+
         if (!credentials?.email || !credentials?.password) {
+          console.log("Missing email or password");
           return null
         }
 
@@ -30,8 +33,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             email: credentials.email as string
           }
         })
+        console.log("User found in DB:", user);
 
         if (!user || !user.password) {
+          console.log("User not found or no password set");
           return null
         }
 
@@ -39,11 +44,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           credentials.password as string,
           user.password
         )
+        console.log("Password match result:", passwordMatch);
 
         if (!passwordMatch) {
+          console.log("Password does not match");
           return null
         }
 
+        // Check if email is verified (optional - log warning but allow login)
+        if (!user.emailVerified) {
+          console.log("Warning: Email not verified for user:", user.email);
+          // Allow login but user should verify email later
+          // Uncomment the line below to enforce email verification:
+          // throw new Error("Please verify your email before logging in. Check your inbox for the verification link.");
+        }
+
+        console.log("Authorization successful");
         return {
           id: user.id,
           email: user.email,

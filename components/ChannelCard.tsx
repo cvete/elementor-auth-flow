@@ -25,7 +25,7 @@ const ChannelCard = ({ channel, watchText, continueBadge, featured = false }: Ch
       <div className="bg-white rounded-xl p-5 border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-200">
         <div className="flex flex-col items-center">
           {/* Channel Logo */}
-          <div className="w-20 h-20 mb-4 flex items-center justify-center">
+          <div className="w-28 h-28 mb-4 flex items-center justify-center">
             <img
               src={channel.logo}
               alt={channel.name}

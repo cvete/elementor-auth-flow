@@ -2,17 +2,21 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Settings } from "lucide-react";
+import { Settings, Globe } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useLanguage } from "@/lib/contexts/LanguageContext";
+import { useLanguage, Language } from "@/lib/contexts/LanguageContext";
 import { getTranslation } from "@/lib/translations";
 
 const DashboardHeader = () => {
   const router = useRouter();
-  const { language } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const t = getTranslation(language);
+
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -49,15 +53,52 @@ const DashboardHeader = () => {
             <span className="text-lg font-semibold text-slate-900">tvstanici.net</span>
           </Link>
 
-          {/* Admin Button */}
-          <Button
-            variant="ghost"
-            className="text-slate-600 hover:text-slate-900 hover:bg-slate-50 gap-2"
-            onClick={handleSignOut}
-          >
-            <Settings className="h-4 w-4" />
-            {t.admin}
-          </Button>
+          {/* Right side buttons */}
+          <div className="flex items-center gap-2">
+            {/* Language Switcher */}
+            <div className="flex items-center gap-1 bg-slate-50 rounded-lg p-1">
+              <button
+                onClick={() => handleLanguageChange('en')}
+                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
+                  language === 'en'
+                    ? 'bg-slate-900 text-white'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                }`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => handleLanguageChange('mk')}
+                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
+                  language === 'mk'
+                    ? 'bg-slate-900 text-white'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                }`}
+              >
+                MK
+              </button>
+              <button
+                onClick={() => handleLanguageChange('de')}
+                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
+                  language === 'de'
+                    ? 'bg-slate-900 text-white'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                }`}
+              >
+                DE
+              </button>
+            </div>
+
+            {/* Sign Out Button */}
+            <Button
+              variant="ghost"
+              className="text-slate-600 hover:text-slate-900 hover:bg-slate-50 gap-2"
+              onClick={handleSignOut}
+            >
+              <Settings className="h-4 w-4" />
+              {t.signOut}
+            </Button>
+          </div>
         </div>
       </div>
     </header>

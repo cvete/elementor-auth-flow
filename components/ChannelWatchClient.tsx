@@ -1,16 +1,17 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Channel } from '@/lib/channels';
+import { Channel, channels } from '@/lib/channels';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useLanguage } from '@/lib/contexts/LanguageContext';
+import { useLanguage, Language } from '@/lib/contexts/LanguageContext';
 import { getTranslation } from '@/lib/translations';
 import { signOut } from 'next-auth/react';
 import { toast } from '@/components/ui/use-toast';
 import Link from 'next/link';
 import Script from 'next/script';
+import ChannelCard from '@/components/ChannelCard';
 
 interface ChannelWatchClientProps {
   channel: Channel;
@@ -24,13 +25,16 @@ declare global {
 
 export default function ChannelWatchClient({ channel }: ChannelWatchClientProps) {
   const router = useRouter();
-  const { language } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const t = getTranslation(language);
   const playerRef = useRef<any>(null);
   const playerContainerRef = useRef<HTMLDivElement>(null);
 
   const backText = language === 'mk' ? 'Назад кон канали' : language === 'de' ? 'Zurück zu Kanälen' : 'Back to Channels';
-  const nowWatchingText = language === 'mk' ? 'Сега гледате' : language === 'de' ? 'Jetzt ansehen' : 'Now Watching';
+
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -91,6 +95,10 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
     };
   }, [channel]);
 
+  // Get other channels (exclude current channel)
+  const otherChannels = channels.filter(c => c.id !== channel.id);
+  const otherChannelsText = language === 'mk' ? 'Други канали' : language === 'de' ? 'Andere Kanäle' : 'Other Channels';
+
   return (
     <>
       <Script
@@ -98,93 +106,146 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
         strategy="beforeInteractive"
       />
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 shadow-sm">
-          <div className="container mx-auto px-4 py-4 max-w-7xl">
+        <header className="bg-white border-b border-gray-100">
+          <div className="container mx-auto px-4 py-5 max-w-7xl">
             <div className="flex justify-between items-center">
               {/* Logo */}
-              <Link href="/dashboard" className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <Link href="/dashboard" className="flex items-center gap-3">
+                <div className="w-9 h-9 bg-slate-900 rounded-lg flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
                   </svg>
                 </div>
-                <span className="text-xl font-semibold text-gray-900">tvstanici.net</span>
+                <span className="text-lg font-semibold text-slate-900">tvstanici.net</span>
               </Link>
 
-              {/* Admin Button */}
-              <Button
-                variant="ghost"
-                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 gap-2"
-                onClick={handleSignOut}
-              >
-                <Settings className="h-4 w-4" />
-                {t.admin}
-              </Button>
+              {/* Right side buttons */}
+              <div className="flex items-center gap-2">
+                {/* Language Switcher */}
+                <div className="flex items-center gap-1 bg-slate-50 rounded-lg p-1">
+                  <button
+                    onClick={() => handleLanguageChange('en')}
+                    className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
+                      language === 'en'
+                        ? 'bg-slate-900 text-white'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    onClick={() => handleLanguageChange('mk')}
+                    className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
+                      language === 'mk'
+                        ? 'bg-slate-900 text-white'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    MK
+                  </button>
+                  <button
+                    onClick={() => handleLanguageChange('de')}
+                    className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
+                      language === 'de'
+                        ? 'bg-slate-900 text-white'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    }`}
+                  >
+                    DE
+                  </button>
+                </div>
+
+                {/* Sign Out Button */}
+                <Button
+                  variant="ghost"
+                  className="text-slate-600 hover:text-slate-900 hover:bg-slate-50 gap-2"
+                  onClick={handleSignOut}
+                >
+                  <Settings className="h-4 w-4" />
+                  {t.signOut}
+                </Button>
+              </div>
             </div>
           </div>
         </header>
 
-        {/* Breadcrumb / Back Button */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="container mx-auto px-4 py-3 max-w-7xl">
+        {/* Main Content */}
+        <main className="container mx-auto px-4 py-6 max-w-7xl">
+          {/* Back Button */}
+          <div className="mb-6">
             <Button
               variant="ghost"
               onClick={() => router.push('/dashboard')}
-              className="gap-2 text-gray-600 hover:text-gray-900"
+              className="gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-50 -ml-3 px-3 py-2 h-auto font-medium"
             >
               <ArrowLeft className="h-4 w-4" />
               {backText}
             </Button>
           </div>
-        </div>
 
-        {/* Main Content */}
-        <main className="container mx-auto px-4 py-8 max-w-7xl">
-          {/* Now Watching Badge */}
-          <div className="mb-4">
-            <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full">
-              <div className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium">{nowWatchingText}</span>
-            </div>
+          {/* Top Ad Placeholder */}
+          <div className="mb-6 bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center h-24">
+            <span className="text-slate-400 text-sm font-medium">Advertisement</span>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            {/* Video Player */}
-            <div className="relative bg-black" style={{ paddingTop: '56.25%' }}>
-              <div
-                ref={playerContainerRef}
-                className="absolute inset-0"
-              />
-            </div>
+          {/* Video Player Section with Right Ad */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+            {/* Video Player - Takes 3 columns on large screens */}
+            <div className="lg:col-span-3">
+              <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                {/* Video Player */}
+                <div className="relative bg-black" style={{ paddingTop: '56.25%' }}>
+                  <div
+                    ref={playerContainerRef}
+                    className="absolute inset-0"
+                  />
+                </div>
 
-            {/* Channel Info */}
-            <div className="p-6">
-              <div className="flex items-start gap-4">
-                <img
-                  src={channel.logo}
-                  alt={channel.name}
-                  className="h-16 w-16 object-contain rounded-lg"
-                />
-                <div className="flex-1">
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{channel.name}</h1>
-                  <p className="text-sm text-purple-600 font-medium mb-4">{channel.category}</p>
-                  <p className="text-gray-700 leading-relaxed">{channel.description}</p>
+                {/* Channel Info */}
+                <div className="p-6 border-t border-slate-200">
+                  <div className="flex items-start gap-4">
+                    <div className="w-16 h-16 flex items-center justify-center bg-slate-50 rounded-lg border border-slate-200">
+                      <img
+                        src={channel.logo}
+                        alt={channel.name}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h1 className="text-2xl font-semibold text-slate-900 mb-1">{channel.name}</h1>
+                      <p className="text-sm text-slate-500 font-medium mb-3">{channel.category}</p>
+                      <p className="text-slate-600 leading-relaxed">{channel.description}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </main>
 
-        {/* Footer */}
-        <footer className="bg-white border-t border-gray-200 py-6 mt-12">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="text-center text-sm text-gray-600">
-              <p>© {new Date().getFullYear()} tvstanici.net</p>
+            {/* Right Side Ad Placeholder - Takes 1 column on large screens */}
+            <div className="lg:col-span-1">
+              <div className="bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center sticky top-6" style={{ minHeight: '400px' }}>
+                <span className="text-slate-400 text-sm font-medium">Advertisement</span>
+              </div>
             </div>
           </div>
-        </footer>
+
+          {/* Other Channels Section */}
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold text-slate-900 mb-6">{otherChannelsText}</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {otherChannels.map(ch => (
+                <ChannelCard
+                  key={ch.id}
+                  channel={ch}
+                  watchText={t.watch}
+                  continueBadge={t.continueBadge}
+                />
+              ))}
+            </div>
+          </div>
+        </main>
       </div>
     </>
   );

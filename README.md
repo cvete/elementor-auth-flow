@@ -54,20 +54,46 @@ npm run dev
 
 This project is built with:
 
-- Vite
-- TypeScript
+- Next.js
 - React
+- TypeScript
 - shadcn-ui
 - Tailwind CSS
+- Prisma
+- NextAuth.js
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/8cddb9e8-02f2-4153-b489-3f9ec7d69f36) and click on Share -> Publish.
+### Deploy to Vercel
 
-## Can I connect a custom domain to my Lovable project?
+1. Push your code to GitHub
+2. Import your repository in Vercel
+3. Configure the following environment variables in Vercel:
+   - `DATABASE_URL` - Your PostgreSQL database URL
+   - `NEXTAUTH_URL` - Your production URL (e.g., https://yourdomain.com)
+   - `NEXTAUTH_SECRET` - A random secret string
+   - `GOOGLE_CLIENT_ID` - (Optional) Google OAuth client ID
+   - `GOOGLE_CLIENT_SECRET` - (Optional) Google OAuth secret
+   - `RESEND_API_KEY` - Your Resend API key for emails
+   - `FROM_EMAIL` - Your verified sender email address
 
-Yes, you can!
+4. Deploy!
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Database Setup
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Make sure to run Prisma migrations on your production database:
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+## Features
+
+- 🔐 User authentication with NextAuth.js (Email/Password + Google OAuth)
+- 📧 Email verification for new registrations
+- 🔑 Password reset functionality with email
+- 📺 Live TV channel streaming
+- 🌍 Multi-language support (English, Macedonian, German)
+- 📱 Responsive design
+- 🎨 Modern UI with Tailwind CSS and shadcn/ui
