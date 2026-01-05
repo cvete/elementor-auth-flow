@@ -1,119 +1,183 @@
-# Deployment Guide
+# Deployment Guide - tvstanici.net
 
 ## Prerequisites
 
-Before deploying to Netlify, you need:
+1. A PostgreSQL database (you can use Vercel Postgres, Supabase, or any PostgreSQL provider)
+2. A Resend account for email functionality
+3. (Optional) Google OAuth credentials
 
-1. **A Production PostgreSQL Database**
-2. **Environment Variables configured in Netlify**
+## Step 1: Prepare Your Database
 
-## Step 1: Set Up Production Database
+1. Create a PostgreSQL database
+2. Note your database connection string (it should look like):
+   ```
+   postgresql://username:password@host:5432/database?schema=public
+   ```
 
-You need a hosted PostgreSQL database. Here are free options:
+## Step 2: Deploy to Vercel
 
-### Option A: Neon (Recommended - Easiest)
+### Option A: Deploy via Vercel Dashboard
 
-1. Go to [https://neon.tech](https://neon.tech)
-2. Sign up for free
-3. Create a new project
-4. Copy the connection string (looks like: `postgresql://username:password@host/database`)
+1. Go to [Vercel](https://vercel.com)
+2. Click "Add New" → "Project"
+3. Import your GitHub repository: `cvete/elementor-auth-flow`
+4. Configure the project:
+   - **Framework Preset**: Next.js
+   - **Build Command**: `prisma generate && next build` (already configured)
+   - **Output Directory**: `.next`
 
-### Option B: Supabase
-
-1. Go to [https://supabase.com](https://supabase.com)
-2. Create a new project
-3. Go to Project Settings → Database
-4. Copy the connection string (choose "Connection string" → "Nodejs")
-
-### Option C: Railway
-
-1. Go to [https://railway.app](https://railway.app)
-2. Create a new project
-3. Add PostgreSQL service
-4. Copy the connection string from the "Connect" tab
-
-## Step 2: Run Prisma Migration on Production Database
-
-After getting your production database URL:
+### Option B: Deploy via Vercel CLI
 
 ```bash
-# Set the production database URL temporarily
-export DATABASE_URL="your-production-database-url-here"
-
-# Run migrations
-npx prisma migrate deploy
-
-# Or if on Windows:
-set DATABASE_URL=your-production-database-url-here
-npx prisma migrate deploy
+npm i -g vercel
+vercel login
+vercel
 ```
 
-## Step 3: Configure Netlify Environment Variables
+## Step 3: Configure Environment Variables
 
-1. Go to your Netlify site dashboard
-2. Navigate to **Site settings** → **Environment variables**
-3. Add the following variables:
+In Vercel Dashboard → Settings → Environment Variables, add:
 
 ### Required Variables:
 
-| Variable Name | Value | Description |
-|--------------|-------|-------------|
-| `DATABASE_URL` | `postgresql://user:pass@host/db` | Your production PostgreSQL connection string |
-| `NEXTAUTH_URL` | `https://your-site.netlify.app` | Your Netlify site URL |
-| `NEXTAUTH_SECRET` | Generate with `openssl rand -base64 32` | Random secret for NextAuth |
+```bash
+# Database
+DATABASE_URL=postgresql://username:password@host:5432/database?schema=public
+
+# NextAuth
+NEXTAUTH_URL=https://your-domain.vercel.app
+NEXTAUTH_SECRET=your-random-secret-string-min-32-chars
+
+# Email (Resend)
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+FROM_EMAIL=noreply@your-verified-domain.com
+```
 
 ### Optional Variables (for Google OAuth):
 
-| Variable Name | Value | Description |
-|--------------|-------|-------------|
-| `GOOGLE_CLIENT_ID` | Your Google OAuth Client ID | Get from Google Cloud Console |
-| `GOOGLE_CLIENT_SECRET` | Your Google OAuth Client Secret | Get from Google Cloud Console |
+```bash
+GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
 
-## Step 4: Deploy
+## Step 4: Generate NEXTAUTH_SECRET
 
-Once environment variables are configured:
+Generate a secure secret:
 
-1. Push your code to GitHub (already done)
-2. Netlify will automatically redeploy
-3. Or manually trigger a redeploy in Netlify dashboard
+```bash
+openssl rand -base64 32
+```
 
-## Troubleshooting
+Or use: https://generate-secret.vercel.app/32
 
-### Error: "Cannot find module '@prisma/client'"
+## Step 5: Setup Prisma Database
 
-- Make sure `postinstall` script is in package.json
-- Redeploy the site
+After deployment, run these commands to setup your database:
 
-### Error: "Can't reach database server"
+### Option A: Using Vercel CLI
+```bash
+vercel env pull .env.local
+npx prisma generate
+npx prisma db push
+```
 
-- Check that DATABASE_URL is set correctly in Netlify
-- Verify your database is accessible from external connections
-- Check if your database provider requires IP whitelisting
+### Option B: Using SQL Console
+Run the following SQL directly in your database:
 
-### 500 Error on /api/auth endpoints
+```sql
+-- Create User table
+CREATE TABLE "User" (
+  "id" TEXT NOT NULL,
+  "name" TEXT,
+  "email" TEXT NOT NULL,
+  "emailVerified" TIMESTAMP(3),
+  "password" TEXT,
+  "image" TEXT,
+  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP(3) NOT NULL,
+  "passwordResetToken" TEXT,
+  "passwordResetTokenExpires" TIMESTAMP(3),
+  CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
-- Verify NEXTAUTH_SECRET is set
-- Verify NEXTAUTH_URL matches your Netlify domain
-- Check Netlify function logs for detailed errors
+-- Create VerificationToken table
+CREATE TABLE "VerificationToken" (
+  "token" TEXT NOT NULL,
+  "identifier" TEXT NOT NULL,
+  "expires" TIMESTAMP(3) NOT NULL,
+  CONSTRAINT "VerificationToken_pkey" PRIMARY KEY ("token")
+);
 
-## Google OAuth Setup (Optional)
+-- Create indexes
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "User_passwordResetToken_key" ON "User"("passwordResetToken");
+CREATE UNIQUE INDEX "VerificationToken_identifier_key" ON "VerificationToken"("identifier");
+```
+
+## Step 6: Configure Resend for Emails
+
+1. Go to [Resend](https://resend.com)
+2. Verify your domain (e.g., `email.tvstanici.net`)
+3. Create an API key
+4. Update `FROM_EMAIL` to use your verified domain
+
+## Step 7: (Optional) Setup Google OAuth
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com)
 2. Create a new project or select existing
 3. Enable Google+ API
-4. Go to Credentials → Create Credentials → OAuth 2.0 Client ID
+4. Create OAuth 2.0 credentials
 5. Add authorized redirect URIs:
-   - `https://your-site.netlify.app/api/auth/callback/google`
+   - `https://your-domain.vercel.app/api/auth/callback/google`
    - `http://localhost:3000/api/auth/callback/google` (for local dev)
-6. Copy Client ID and Client Secret
-7. Add to Netlify environment variables
 
-## Local Development
+## Step 8: Verify Deployment
 
-Copy `.env.example` to `.env.local` and fill in your values:
+1. Visit your Vercel URL
+2. Test user registration
+3. Check email verification
+4. Test password reset
+5. Test channel streaming
+6. Test language switching
 
-```bash
-cp .env.example .env.local
-```
+## Troubleshooting
 
-Edit `.env.local` with your local database and credentials.
+### Database Connection Issues
+- Ensure your `DATABASE_URL` is correct
+- Check if Vercel can access your database (firewall rules)
+- Verify SSL mode is correct
+
+### Email Not Sending
+- Verify your domain in Resend
+- Check `FROM_EMAIL` matches verified domain
+- Ensure `RESEND_API_KEY` is correct
+
+### Build Failures
+- Check Vercel build logs
+- Ensure all dependencies are in `package.json`
+- Verify `prisma generate` runs successfully
+
+## Production Checklist
+
+- [ ] Database is setup and accessible
+- [ ] All environment variables are configured
+- [ ] Prisma schema is applied to database
+- [ ] Email domain is verified in Resend
+- [ ] Google OAuth is configured (if used)
+- [ ] Test user registration and email verification
+- [ ] Test password reset functionality
+- [ ] Test all three languages (EN, MK, DE)
+- [ ] Verify TV channels load correctly
+- [ ] Check mobile responsiveness
+
+## Custom Domain Setup
+
+1. In Vercel Dashboard → Settings → Domains
+2. Add your custom domain (e.g., `tvstanici.net`)
+3. Configure DNS records as instructed
+4. Update `NEXTAUTH_URL` environment variable
+
+## Support
+
+Repository: https://github.com/cvete/elementor-auth-flow
+Issues: https://github.com/cvete/elementor-auth-flow/issues
