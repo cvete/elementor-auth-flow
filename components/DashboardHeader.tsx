@@ -2,12 +2,19 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Settings, Globe } from "lucide-react";
+import { Settings, Globe, User, LogOut, ChevronDown } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useLanguage, Language } from "@/lib/contexts/LanguageContext";
 import { getTranslation } from "@/lib/translations";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 const DashboardHeader = () => {
   const router = useRouter();
@@ -55,49 +62,57 @@ const DashboardHeader = () => {
 
           {/* Right side buttons */}
           <div className="flex items-center gap-2">
-            {/* Language Switcher */}
-            <div className="flex items-center gap-1 bg-slate-50 rounded-lg p-1">
-              <button
-                onClick={() => handleLanguageChange('en')}
-                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
-                  language === 'en'
-                    ? 'bg-slate-900 text-white'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => handleLanguageChange('mk')}
-                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
-                  language === 'mk'
-                    ? 'bg-slate-900 text-white'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`}
-              >
-                MK
-              </button>
-              <button
-                onClick={() => handleLanguageChange('de')}
-                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
-                  language === 'de'
-                    ? 'bg-slate-900 text-white'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`}
-              >
-                DE
-              </button>
-            </div>
+            {/* Language Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="text-slate-600 hover:text-slate-900 hover:bg-slate-50 gap-2"
+                >
+                  <Globe className="h-4 w-4" />
+                  <span className="font-medium">{language.toUpperCase()}</span>
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => handleLanguageChange('en')}
+                  className={language === 'en' ? 'bg-slate-100' : ''}
+                >
+                  English
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleLanguageChange('mk')}
+                  className={language === 'mk' ? 'bg-slate-100' : ''}
+                >
+                  Македонски
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleLanguageChange('de')}
+                  className={language === 'de' ? 'bg-slate-100' : ''}
+                >
+                  Deutsch
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-            {/* Sign Out Button */}
-            <Button
-              variant="ghost"
-              className="text-slate-600 hover:text-slate-900 hover:bg-slate-50 gap-2"
-              onClick={handleSignOut}
-            >
-              <Settings className="h-4 w-4" />
-              {t.signOut}
-            </Button>
+            {/* Account Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                >
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleSignOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  {t.signOut}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
