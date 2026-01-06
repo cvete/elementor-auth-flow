@@ -45,7 +45,11 @@
       "Bash(npm run build:*)",
       "Bash(npx prisma db push:*)",
       "Bash(\"/c/Program Files/PostgreSQL/18/bin/psql\" -U postgres -h 91.98.112.195 -d tvstanici_db -c \"ALTER TABLE \"\"User\"\" ADD COLUMN IF NOT EXISTS \"\"passwordResetToken\"\" TEXT UNIQUE; ALTER TABLE \"\"User\"\" ADD COLUMN IF NOT EXISTS \"\"passwordResetTokenExpires\"\" TIMESTAMP;\")",
-      "Bash(node add-reset-columns.js:*)"
+      "Bash(node add-reset-columns.js:*)",
+      "Bash(git fetch:*)",
+      "Bash(export PGPASSWORD=tvstanici_pass_2025!)",
+      "Bash(\"/c/Program Files/PostgreSQL/18/bin/psql\" -U tvstanici_user -h 91.98.112.195 -d tvstanici_db -f prisma/migrations/add_ads_table.sql)",
+      "Bash(node add-ads-table.js:*)"
     ]
   }
 }

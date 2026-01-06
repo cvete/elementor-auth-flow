@@ -34,6 +34,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    if (!isAuth) {
+      console.log('[MIDDLEWARE] Unauthenticated user trying to access admin, redirecting to login');
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    // Check if user is admin
+    const isAdmin = token.email === 'maceski.cvete@gmail.com';
+    if (!isAdmin) {
+      console.log('[MIDDLEWARE] Non-admin user trying to access admin, redirecting to dashboard');
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+  }
+
   console.log('[MIDDLEWARE] Allowing request');
   return NextResponse.next()
 }

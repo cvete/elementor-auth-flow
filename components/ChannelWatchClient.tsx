@@ -7,11 +7,12 @@ import { ArrowLeft, Settings, Globe, User, LogOut, ChevronDown } from 'lucide-re
 import { Button } from '@/components/ui/button';
 import { useLanguage, Language } from '@/lib/contexts/LanguageContext';
 import { getTranslation } from '@/lib/translations';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { toast } from '@/components/ui/use-toast';
 import Link from 'next/link';
 import Script from 'next/script';
 import ChannelCard from '@/components/ChannelCard';
+import { AdSlot } from '@/components/AdSlot';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,9 +35,11 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
   const router = useRouter();
   const { language, setLanguage } = useLanguage();
   const t = getTranslation(language);
+  const { data: session } = useSession();
   const playerRef = useRef<any>(null);
   const playerContainerRef = useRef<HTMLDivElement>(null);
 
+  const isAdmin = session?.user?.email === "maceski.cvete@gmail.com";
   const backText = language === 'mk' ? 'Назад кон канали' : language === 'de' ? 'Zurück zu Kanälen' : 'Back to Channels';
 
   const handleLanguageChange = (lang: Language) => {
@@ -190,6 +193,15 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
+                    {isAdmin && (
+                      <>
+                        <DropdownMenuItem onClick={() => router.push('/admin/ads')}>
+                          <Settings className="h-4 w-4 mr-2" />
+                          Ad Management
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                      </>
+                    )}
                     <DropdownMenuItem onClick={handleSignOut}>
                       <LogOut className="h-4 w-4 mr-2" />
                       {t.signOut}
@@ -215,10 +227,8 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
             </Button>
           </div>
 
-          {/* Top Ad Placeholder */}
-          <div className="mb-6 bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center h-24">
-            <span className="text-slate-400 text-sm font-medium">Advertisement</span>
-          </div>
+          {/* Top Ad */}
+          <AdSlot placement="player_top" className="mb-6 min-h-[90px]" />
 
           {/* Video Player Section with Right Ad */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
@@ -253,11 +263,10 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
               </div>
             </div>
 
-            {/* Right Side Ad Placeholder - Takes 1 column on large screens */}
-            <div className="lg:col-span-1">
-              <div className="bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center sticky top-6" style={{ minHeight: '400px' }}>
-                <span className="text-slate-400 text-sm font-medium">Advertisement</span>
-              </div>
+            {/* Right Side Ads - Takes 1 column on large screens */}
+            <div className="lg:col-span-1 space-y-6">
+              <AdSlot placement="player_sidebar_1" className="sticky top-6 min-h-[300px]" />
+              <AdSlot placement="player_sidebar_2" className="min-h-[300px]" />
             </div>
           </div>
 

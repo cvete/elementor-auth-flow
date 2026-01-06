@@ -58,3 +58,22 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Ad {
+  id          String    @id @default(cuid())
+  placement   String    // player_top, player_sidebar_1, player_sidebar_2
+  title       String
+  htmlCode    String?   @db.Text
+  imageUrl    String?
+  linkUrl     String?
+  width       Int?
+  height      Int?
+  enabled     Boolean   @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  weight      Int       @default(1)
+  impressions Int       @default(0)
+  clicks      Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}

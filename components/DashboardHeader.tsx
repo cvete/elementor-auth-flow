@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Settings, Globe, User, LogOut, ChevronDown } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useLanguage, Language } from "@/lib/contexts/LanguageContext";
 import { getTranslation } from "@/lib/translations";
@@ -20,6 +20,9 @@ const DashboardHeader = () => {
   const router = useRouter();
   const { language, setLanguage } = useLanguage();
   const t = getTranslation(language);
+  const { data: session } = useSession();
+
+  const isAdmin = session?.user?.email === "maceski.cvete@gmail.com";
 
   const handleLanguageChange = (lang: Language) => {
     setLanguage(lang);
@@ -122,6 +125,15 @@ const DashboardHeader = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                {isAdmin && (
+                  <>
+                    <DropdownMenuItem onClick={() => router.push('/admin/ads')}>
+                      <Settings className="h-4 w-4 mr-2" />
+                      Ad Management
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
                 <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="h-4 w-4 mr-2" />
                   {t.signOut}
