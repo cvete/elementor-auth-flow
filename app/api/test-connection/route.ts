@@ -29,7 +29,7 @@ export async function GET(request: Request) {
           id: true,
           email: true,
           emailVerified: true,
-          hasPassword: true,
+          password: true,
           createdAt: true,
           updatedAt: true,
         }
@@ -51,7 +51,7 @@ export async function GET(request: Request) {
           id: specificUser.id,
           email: specificUser.email,
           emailVerified: !!specificUser.emailVerified,
-          hasPassword: !!specificUser.hasPassword,
+          hasPassword: !!specificUser.password,
           createdAt: specificUser.createdAt,
           updatedAt: specificUser.updatedAt,
         } : email ? 'User not found' : null,
