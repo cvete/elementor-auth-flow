@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate placement
-    const validPlacements = ["player_top", "player_sidebar_1", "player_sidebar_2"]
+    const validPlacements = ["player_top", "player_sidebar_1", "player_sidebar_2", "dashboard_top", "dashboard_middle", "dashboard_sidebar"]
     if (!validPlacements.includes(placement)) {
       return NextResponse.json(
         { error: "Invalid placement" },

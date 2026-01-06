@@ -20,7 +20,7 @@ interface Ad {
 }
 
 interface AdSlotProps {
-  placement: "player_top" | "player_sidebar_1" | "player_sidebar_2"
+  placement: "player_top" | "player_sidebar_1" | "player_sidebar_2" | "dashboard_top" | "dashboard_middle" | "dashboard_sidebar"
   className?: string
 }
 
@@ -117,6 +117,7 @@ export function AdSlot({ placement, className = "" }: AdSlotProps) {
   const getPlacementStyles = () => {
     switch (placement) {
       case "player_top":
+      case "dashboard_top":
         return {
           container: "w-full",
           placeholder: "min-h-[90px] md:min-h-[90px]",
@@ -127,6 +128,18 @@ export function AdSlot({ placement, className = "" }: AdSlotProps) {
         return {
           container: "w-full",
           placeholder: "min-h-[250px] md:min-h-[300px]",
+          image: "max-w-full mx-auto"
+        }
+      case "dashboard_middle":
+        return {
+          container: "w-full",
+          placeholder: "min-h-[250px]",
+          image: "max-w-full mx-auto"
+        }
+      case "dashboard_sidebar":
+        return {
+          container: "w-full",
+          placeholder: "min-h-[600px]",
           image: "max-w-full mx-auto"
         }
       default:

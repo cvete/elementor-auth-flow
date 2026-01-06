@@ -208,8 +208,11 @@ export default function AdManagementPage() {
   const getPlacementLabel = (placement: string) => {
     const labels: Record<string, string> = {
       player_top: "Player Top",
-      player_sidebar_1: "Sidebar 1",
-      player_sidebar_2: "Sidebar 2",
+      player_sidebar_1: "Player Sidebar 1",
+      player_sidebar_2: "Player Sidebar 2",
+      dashboard_top: "Dashboard Top",
+      dashboard_middle: "Dashboard Middle",
+      dashboard_sidebar: "Dashboard Sidebar",
     }
     return labels[placement] || placement
   }
@@ -327,8 +330,11 @@ export default function AdManagementPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="player_top">Player Top</SelectItem>
-                    <SelectItem value="player_sidebar_1">Sidebar 1</SelectItem>
-                    <SelectItem value="player_sidebar_2">Sidebar 2</SelectItem>
+                    <SelectItem value="player_sidebar_1">Player Sidebar 1</SelectItem>
+                    <SelectItem value="player_sidebar_2">Player Sidebar 2</SelectItem>
+                    <SelectItem value="dashboard_top">Dashboard Top</SelectItem>
+                    <SelectItem value="dashboard_middle">Dashboard Middle</SelectItem>
+                    <SelectItem value="dashboard_sidebar">Dashboard Sidebar</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
