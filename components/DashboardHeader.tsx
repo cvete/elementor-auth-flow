@@ -52,12 +52,16 @@ const DashboardHeader = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-slate-900 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
+            <div className="relative w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
+              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
             </div>
-            <span className="text-lg font-semibold text-slate-900">tvstanici.net</span>
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-slate-900 leading-tight">tvstanici</span>
+              <span className="text-xs font-medium text-slate-500 leading-tight">.net</span>
+            </div>
           </Link>
 
           {/* Right side buttons */}
