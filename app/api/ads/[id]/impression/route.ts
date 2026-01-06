@@ -4,11 +4,12 @@ import { prisma } from "@/lib/prisma"
 // POST /api/ads/:id/impression - Track ad impression
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const ad = await prisma.ad.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         impressions: {
           increment: 1,

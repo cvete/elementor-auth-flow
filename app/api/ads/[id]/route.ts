@@ -5,11 +5,12 @@ import { auth } from "@/lib/auth"
 // GET /api/ads/:id - Get single ad
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const ad = await prisma.ad.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!ad) {
@@ -29,9 +30,10 @@ export async function GET(
 // PUT /api/ads/:id - Update ad (admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await auth()
 
     if (!session?.user) {
@@ -71,7 +73,7 @@ export async function PUT(
 
     // Update ad
     const ad = await prisma.ad.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(placement && { placement }),
         ...(title && { title }),
@@ -100,9 +102,10 @@ export async function PUT(
 // DELETE /api/ads/:id - Delete ad (admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await auth()
 
     if (!session?.user) {
@@ -115,7 +118,7 @@ export async function DELETE(
     }
 
     await prisma.ad.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ success: true })
