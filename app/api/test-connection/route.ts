@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    // Get email from query params if provided
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get('email');
+
     // Test database connection
     const userCount = await prisma.user.count();
 
@@ -16,6 +20,22 @@ export async function GET() {
       }
     });
 
+    // If email is provided, check that specific user
+    let specificUser = null;
+    if (email) {
+      specificUser = await prisma.user.findUnique({
+        where: { email },
+        select: {
+          id: true,
+          email: true,
+          emailVerified: true,
+          hasPassword: true,
+          createdAt: true,
+          updatedAt: true,
+        }
+      });
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Database connection successful',
@@ -27,9 +47,17 @@ export async function GET() {
           emailVerified: !!firstUser.emailVerified,
           createdAt: firstUser.createdAt,
         } : null,
+        specificUser: specificUser ? {
+          id: specificUser.id,
+          email: specificUser.email,
+          emailVerified: !!specificUser.emailVerified,
+          hasPassword: !!specificUser.hasPassword,
+          createdAt: specificUser.createdAt,
+          updatedAt: specificUser.updatedAt,
+        } : email ? 'User not found' : null,
         environment: {
           nodeEnv: process.env.NODE_ENV,
-          hasNextAuthUrl: !!process.env.NEXTAUTH_URL,
+          nextAuthUrl: process.env.NEXTAUTH_URL,
           hasNextAuthSecret: !!process.env.NEXTAUTH_SECRET,
           hasDatabaseUrl: !!process.env.DATABASE_URL,
         }
