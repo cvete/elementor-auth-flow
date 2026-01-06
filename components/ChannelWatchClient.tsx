@@ -140,10 +140,7 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
                     <circle cx="80" cy="5" r="3" fill="#000"/>
                   </svg>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-lg font-bold text-slate-900 leading-tight">tvstanici</span>
-                  <span className="text-xs font-medium text-slate-500 leading-tight">.net</span>
-                </div>
+                <span className="text-lg font-bold text-slate-900">tvstanici.net</span>
               </Link>
 
               {/* Right side buttons */}
