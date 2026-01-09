@@ -40,6 +40,7 @@ const channelStreamMap: Record<string, string> = {
   'telma': 'telma',
   'alfa': 'alfa',
   'mrt1': 'mrt1',
+  'tv24': 'tv24',
   // Add more mappings as you configure more channels
 };
 

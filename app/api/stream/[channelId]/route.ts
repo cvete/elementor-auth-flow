@@ -28,6 +28,11 @@ const channelConfigs: Record<string, { url: string; id: string; key: string }> =
     id: '5',
     key: 'Bojance4',
   },
+  'tv24': {
+    url: 'https://teve.mk/tvstanici/24vesti/playlist.m3u8',
+    id: '5',
+    key: 'Bojance4',
+  },
   // Add more channels here as needed
 };
 
