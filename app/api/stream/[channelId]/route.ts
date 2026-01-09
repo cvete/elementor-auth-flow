@@ -9,7 +9,7 @@ const channelConfigs: Record<string, { url: string; id: string; key: string }> =
     key: 'EmaBojance4',
   },
   'kanal-5': {
-    url: 'https://s2.teve.mk/tvstanici/2/playlist.m3u8',
+    url: 'https://teve.mk/tvstanici/2/playlist.m3u8',
     id: '5',
     key: 'Bojance4',
   },
