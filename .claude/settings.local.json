@@ -54,7 +54,9 @@
       "Bash(git stash:*)",
       "Bash(git cherry-pick:*)",
       "Bash(git show:*)",
-      "Bash(netstat:*)"
+      "Bash(netstat:*)",
+      "Bash(npx vercel:*)",
+      "Bash(gh auth:*)"
     ]
   }
 }

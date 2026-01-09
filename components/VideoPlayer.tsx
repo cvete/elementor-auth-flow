@@ -64,7 +64,7 @@ export default function VideoPlayer({
 
     // Wait for Clappr to be loaded
     const initPlayer = () => {
-      if (typeof window !== 'undefined' && window.Clappr) {
+      if (typeof window !== 'undefined' && window.Clappr && containerRef.current) {
         // Destroy existing player if any
         if (playerRef.current) {
           playerRef.current.destroy();

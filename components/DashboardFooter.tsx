@@ -7,10 +7,10 @@ const DashboardFooter = () => {
   const { language } = useLanguage();
 
   const legalLinks = [
-    { href: "/legal", label: language === 'en' ? 'Legal' : language === 'fr' ? 'Mentions' : language === 'de' ? 'Impressum' : 'Правна напомена' },
-    { href: "/privacy", label: language === 'en' ? 'Privacy' : language === 'fr' ? 'Confidentialité' : language === 'de' ? 'Datenschutz' : 'Приватност' },
-    { href: "/cookies", label: language === 'en' ? 'Cookies' : language === 'fr' ? 'Cookies' : language === 'de' ? 'Cookies' : 'Колачиња' },
-    { href: "/terms", label: language === 'en' ? 'Terms' : language === 'fr' ? 'Conditions' : language === 'de' ? 'AGB' : 'Услови' },
+    { href: "/legal", label: language === 'en' ? 'Legal' : language === 'de' ? 'Impressum' : 'Правна напомена' },
+    { href: "/privacy", label: language === 'en' ? 'Privacy' : language === 'de' ? 'Datenschutz' : 'Приватност' },
+    { href: "/cookies", label: language === 'en' ? 'Cookies' : language === 'de' ? 'Cookies' : 'Колачиња' },
+    { href: "/terms", label: language === 'en' ? 'Terms' : language === 'de' ? 'AGB' : 'Услови' },
     { href: "/copyright", label: 'Copyright' },
   ];
 
