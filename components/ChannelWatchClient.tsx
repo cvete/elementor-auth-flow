@@ -13,6 +13,7 @@ import Link from 'next/link';
 import Script from 'next/script';
 import ChannelCard from '@/components/ChannelCard';
 import { AdSlot } from '@/components/AdSlot';
+import VideoPlayer from '@/components/VideoPlayer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +31,12 @@ declare global {
     Clappr: any;
   }
 }
+
+// Map channel IDs to stream channel IDs
+const channelStreamMap: Record<string, string> = {
+  'sitel': 'tv-sitel',
+  // Add more mappings as you configure more channels
+};
 
 export default function ChannelWatchClient({ channel }: ChannelWatchClientProps) {
   const router = useRouter();
@@ -236,12 +243,25 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
             <div className="lg:col-span-3">
               <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                 {/* Video Player */}
-                <div className="relative bg-black" style={{ paddingTop: '56.25%' }}>
-                  <div
-                    ref={playerContainerRef}
-                    className="absolute inset-0"
-                  />
-                </div>
+                {channelStreamMap[channel.id] ? (
+                  // Use custom VideoPlayer for channels with signed streams
+                  <div className="aspect-video bg-black">
+                    <VideoPlayer
+                      channelId={channelStreamMap[channel.id]}
+                      autoPlay={true}
+                      height="100%"
+                      width="100%"
+                    />
+                  </div>
+                ) : (
+                  // Use fallback Clappr player for other channels
+                  <div className="relative bg-black" style={{ paddingTop: '56.25%' }}>
+                    <div
+                      ref={playerContainerRef}
+                      className="absolute inset-0"
+                    />
+                  </div>
+                )}
 
                 {/* Channel Info */}
                 <div className="p-6 border-t border-slate-200">

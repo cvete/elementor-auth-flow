@@ -49,7 +49,11 @@
       "Bash(git fetch:*)",
       "Bash(export PGPASSWORD=tvstanici_pass_2025!)",
       "Bash(\"/c/Program Files/PostgreSQL/18/bin/psql\" -U tvstanici_user -h 91.98.112.195 -d tvstanici_db -f prisma/migrations/add_ads_table.sql)",
-      "Bash(node add-ads-table.js:*)"
+      "Bash(node add-ads-table.js:*)",
+      "Bash(git checkout:*)",
+      "Bash(git stash:*)",
+      "Bash(git cherry-pick:*)",
+      "Bash(git show:*)"
     ]
   }
 }
