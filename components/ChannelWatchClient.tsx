@@ -38,6 +38,7 @@ const channelStreamMap: Record<string, string> = {
   'sitel': 'tv-sitel',
   'kanal5': 'kanal-5',
   'telma': 'telma',
+  'alfa': 'alfa',
   // Add more mappings as you configure more channels
 };
 

@@ -18,6 +18,11 @@ const channelConfigs: Record<string, { url: string; id: string; key: string }> =
     id: '5',
     key: 'Bojance4',
   },
+  'alfa': {
+    url: 'https://teve.mk/tvstanici/alfa/playlist.m3u8',
+    id: '5',
+    key: 'Bojance4',
+  },
   // Add more channels here as needed
 };
 
