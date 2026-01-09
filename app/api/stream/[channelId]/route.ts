@@ -13,6 +13,11 @@ const channelConfigs: Record<string, { url: string; id: string; key: string }> =
     id: '5',
     key: 'Bojance4',
   },
+  'telma': {
+    url: 'https://teve.mk/tvstanici/telma/playlist.m3u8',
+    id: '5',
+    key: 'Bojance4',
+  },
   // Add more channels here as needed
 };
 

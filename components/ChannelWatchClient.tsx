@@ -37,6 +37,7 @@ declare global {
 const channelStreamMap: Record<string, string> = {
   'sitel': 'tv-sitel',
   'kanal5': 'kanal-5',
+  'telma': 'telma',
   // Add more mappings as you configure more channels
 };
 
