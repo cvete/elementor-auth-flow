@@ -21,8 +21,16 @@ export default function CookieConsent() {
     if (!consent) {
       setShowBanner(true);
     } else {
-      const saved = JSON.parse(consent);
-      setPreferences(saved.preferences);
+      try {
+        const saved = JSON.parse(consent);
+        if (saved.preferences) {
+          setPreferences(saved.preferences);
+        }
+      } catch {
+        // Invalid JSON (e.g., old "accepted" string), show banner again
+        localStorage.removeItem('cookieConsent');
+        setShowBanner(true);
+      }
     }
 
     // Detect browser language

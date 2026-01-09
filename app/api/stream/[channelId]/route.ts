@@ -13,9 +13,9 @@ const channelConfigs: Record<string, { url: string; id: string; key: string }> =
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { channelId: string } }
+  { params }: { params: Promise<{ channelId: string }> }
 ) {
-  const channelId = params.channelId;
+  const { channelId } = await params;
 
   const config = channelConfigs[channelId];
 
