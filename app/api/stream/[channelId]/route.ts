@@ -23,6 +23,11 @@ const channelConfigs: Record<string, { url: string; id: string; key: string }> =
     id: '5',
     key: 'Bojance4',
   },
+  'mrt1': {
+    url: 'https://teve.mk/tvstanici/mrt1_360p/playlist.m3u8',
+    id: '5',
+    key: 'Bojance4',
+  },
   // Add more channels here as needed
 };
 
