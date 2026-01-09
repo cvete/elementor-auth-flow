@@ -126,9 +126,9 @@ export function AdSlot({ placement, className = "" }: AdSlotProps) {
       case "player_sidebar_1":
       case "player_sidebar_2":
         return {
-          container: "w-full",
-          placeholder: "min-h-[250px] md:min-h-[300px]",
-          image: "max-w-full mx-auto"
+          container: "w-full max-w-[336px]",
+          placeholder: "h-[226px]",
+          image: "max-w-[336px] mx-auto"
         }
       case "dashboard_middle":
         return {

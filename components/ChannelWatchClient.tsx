@@ -14,6 +14,7 @@ import Script from 'next/script';
 import ChannelCard from '@/components/ChannelCard';
 import { AdSlot } from '@/components/AdSlot';
 import VideoPlayer from '@/components/VideoPlayer';
+import DashboardFooter from '@/components/DashboardFooter';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -263,21 +264,17 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
                   </div>
                 )}
 
-                {/* Channel Info */}
-                <div className="p-6 border-t border-slate-200">
-                  <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 flex items-center justify-center bg-slate-50 rounded-lg border border-slate-200">
+                {/* Channel Info - Name only */}
+                <div className="p-4 border-t border-slate-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 flex items-center justify-center bg-slate-50 rounded-lg border border-slate-200">
                       <img
                         src={channel.logo}
                         alt={channel.name}
                         className="max-w-full max-h-full object-contain"
                       />
                     </div>
-                    <div className="flex-1">
-                      <h1 className="text-2xl font-semibold text-slate-900 mb-1">{channel.name}</h1>
-                      <p className="text-sm text-slate-500 font-medium mb-3">{channel.category}</p>
-                      <p className="text-slate-600 leading-relaxed">{channel.description}</p>
-                    </div>
+                    <h1 className="text-xl font-semibold text-slate-900">{channel.name}</h1>
                   </div>
                 </div>
               </div>
@@ -285,8 +282,8 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
 
             {/* Right Side Ads - Takes 1 column on large screens */}
             <div className="lg:col-span-1 space-y-6">
-              <AdSlot placement="player_sidebar_1" className="sticky top-6 min-h-[300px]" />
-              <AdSlot placement="player_sidebar_2" className="min-h-[300px]" />
+              <AdSlot placement="player_sidebar_1" className="min-h-[226px]" />
+              <AdSlot placement="player_sidebar_2" className="min-h-[226px]" />
             </div>
           </div>
 
@@ -305,6 +302,9 @@ export default function ChannelWatchClient({ channel }: ChannelWatchClientProps)
             </div>
           </div>
         </main>
+
+        {/* Footer */}
+        <DashboardFooter />
       </div>
     </>
   );
