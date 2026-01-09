@@ -6,7 +6,7 @@ const channelConfigs: Record<string, { url: string; id: string; key: string }> =
   'tv-sitel': {
     url: 'https://teve.mk/tvstanici/s1/playlist.m3u8',
     id: '5',
-    key: 'EmaBojance44444444444444444',
+    key: 'EmaBojance4',
   },
   // Add more channels here as needed
 };

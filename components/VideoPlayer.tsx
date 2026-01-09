@@ -41,6 +41,7 @@ export default function VideoPlayer({
         }
 
         const data = await response.json();
+        console.log('Stream URL received:', data.streamUrl);
         setStreamUrl(data.streamUrl);
 
         // Refresh the URL before it expires
@@ -71,16 +72,27 @@ export default function VideoPlayer({
         }
 
         // Create new player
+        console.log('Initializing Clappr player with URL:', streamUrl);
+        console.log('Container ID:', containerRef.current.id);
+
         playerRef.current = new window.Clappr.Player({
           source: streamUrl,
           mimeType: 'application/x-mpegURL',
           autoPlay: autoPlay,
-          height: height,
-          width: width,
-          plugins: {
-            core: window.LevelSelector ? [window.LevelSelector] : [],
-          },
+          height: '100%',
+          width: '100%',
           parentId: `#${containerRef.current.id}`,
+          events: {
+            onError: (e: any) => {
+              console.error('Clappr player error:', e);
+            },
+            onPlay: () => {
+              console.log('Clappr: Video started playing');
+            },
+            onStop: () => {
+              console.log('Clappr: Video stopped');
+            },
+          },
         });
 
         setLoading(false);
@@ -113,9 +125,9 @@ export default function VideoPlayer({
   }
 
   return (
-    <div className="relative" style={{ width }}>
+    <div className="relative w-full h-full">
       {loading && (
-        <div className="flex items-center justify-center bg-gray-900 text-white rounded-lg" style={{ height, width }}>
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-900 text-white rounded-lg">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
             <p className="text-sm text-gray-400">Loading stream...</p>
@@ -125,7 +137,8 @@ export default function VideoPlayer({
       <div
         id={`player-${channelId}`}
         ref={containerRef}
-        className={loading ? 'hidden' : 'rounded-lg overflow-hidden'}
+        className="w-full h-full rounded-lg overflow-hidden"
+        style={{ display: loading ? 'none' : 'block' }}
       />
     </div>
   );

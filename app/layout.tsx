@@ -42,7 +42,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/clappr.level-selector/latest/level-selector.min.js"></script>
       </head>
       <body className={inter.className}>
         <Providers>
